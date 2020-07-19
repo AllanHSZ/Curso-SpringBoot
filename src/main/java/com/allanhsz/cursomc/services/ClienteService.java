@@ -15,7 +15,6 @@ import com.allanhsz.cursomc.domain.Cidade;
 import com.allanhsz.cursomc.domain.Cliente;
 import com.allanhsz.cursomc.domain.Endereco;
 import com.allanhsz.cursomc.domain.enums.TipoCliente;
-import com.allanhsz.cursomc.domain.Cliente;
 import com.allanhsz.cursomc.dto.ClienteDTO;
 import com.allanhsz.cursomc.dto.ClienteNewDTO;
 import com.allanhsz.cursomc.repositories.ClienteRepository;
