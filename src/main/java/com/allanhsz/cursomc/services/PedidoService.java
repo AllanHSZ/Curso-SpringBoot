@@ -14,7 +14,6 @@ import com.allanhsz.cursomc.domain.enums.EstadoPagamento;
 import com.allanhsz.cursomc.repositories.ItemPedidoRepository;
 import com.allanhsz.cursomc.repositories.PagamentoRepository;
 import com.allanhsz.cursomc.repositories.PedidoRepository;
-import com.allanhsz.cursomc.repositories.ProdutoRepository;
 import com.allanhsz.cursomc.services.exceptions.ObjectNotFoundException;
 
 @Service
@@ -30,36 +29,42 @@ public class PedidoService {
 	private ProdutoService produtoService;
 	@Autowired
 	private ItemPedidoRepository itemPedidoRepository;
-	
-	public Pedido find(Integer id) {  
-		Optional<Pedido> obj = repo.findById(id);  
-		return obj.orElseThrow(() -> new ObjectNotFoundException( "Objeto não encontrado! Id: " + id + ", Tipo: " + Pedido.class.getName()));
+	@Autowired
+	private ClienteService clienteService;
+
+	public Pedido find(Integer id) {
+		Optional<Pedido> obj = repo.findById(id);
+		return obj.orElseThrow(() -> new ObjectNotFoundException(
+				"Objeto não encontrado! Id: " + id + ", Tipo: " + Pedido.class.getName()));
 	}
-	
+
 	@Transactional
 	public Pedido insert(Pedido obj) {
 		obj.setId(null);
 		obj.setInstante(new Date());
-		
+		obj.setCliente(clienteService.find(obj.getCliente().getId()));
 		obj.getPagamento().setEstado(EstadoPagamento.PENDENTE);
 		obj.getPagamento().setPedido(obj);
-		
-		if(obj.getPagamento() instanceof PagamentoComBoleto) {
+
+		if (obj.getPagamento() instanceof PagamentoComBoleto) {
 			PagamentoComBoleto pagto = (PagamentoComBoleto) obj.getPagamento();
 			boletoService.preencherPagamentoComBoleto(pagto, obj.getInstante());
 		}
-		
+
 		obj = repo.save(obj);
 		pagamentoRepository.save(obj.getPagamento());
-		
+
 		for (ItemPedido ip : obj.getItens()) {
 			ip.setDesconto(0.0);
-			ip.setPreco(produtoService.find(ip.getProduto().getId()).getPreco());
+			ip.setProduto(produtoService.find(ip.getProduto().getId()));
+			ip.setPreco(ip.getProduto().getPreco());
 			ip.setPedido(obj);
 		}
-		
+
 		itemPedidoRepository.saveAll(obj.getItens());
+		System.out.println(obj);
+		
 		return obj;
 	}
-	
+
 }
