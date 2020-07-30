@@ -2,7 +2,7 @@
 
 Repositório utilizado para acompanhar o curso "Spring Boot, Hibernate, REST, Ionic, JWT, S3, MySQL, MongoDB"
 
-Link do curso:  [Spring Boot, Hibernate, REST, Ionic, JWT, S3, MySQL, MongoDB] (https://www.udemy.com/course/spring-boot-ionic/)
+Link do curso: [Spring Boot, Hibernate, REST, Ionic, JWT, S3, MySQL, MongoDB](https://www.udemy.com/course/spring-boot-ionic/)
 
 ### Conteúdos vistos durante o curso
 
